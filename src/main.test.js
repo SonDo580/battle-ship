@@ -1,11 +1,7 @@
-import { ERROR_MESSAGE, SHIP_TYPE, SHIP_LENGTH_MAP, ShipFactory } from "./main";
+import { SHIP_TYPE, SHIP_LENGTH_MAP, ShipFactory } from "./main";
 
 describe("ShipFactory", () => {
-  it("should throw error for invalid ship type", () => {
-    expect(() => ShipFactory("invalid")).toThrow(ERROR_MESSAGE.invalidShipType);
-  });
-
-  it("ship create a ship with correct length", () => {
+  it("should create a ship with correct length", () => {
     const shipType = SHIP_TYPE.battleShip;
     const ship = ShipFactory(shipType);
     expect(ship.length).toBe(SHIP_LENGTH_MAP[shipType]);

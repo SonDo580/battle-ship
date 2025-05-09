@@ -1,7 +1,3 @@
-export const ERROR_MESSAGE = {
-  invalidShipType: "Invalid ship type",
-};
-
 export const SHIP_TYPE = {
   carrier: "carrier",
   battleShip: "battleShip",
@@ -19,21 +15,17 @@ export const SHIP_LENGTH_MAP = {
 };
 
 export function ShipFactory(shipType) {
-  if (!SHIP_LENGTH_MAP[shipType]) {
-    throw new Error(ERROR_MESSAGE.invalidShipType);
-  }
-
   const length = SHIP_LENGTH_MAP[shipType];
-  let hit_count = 0;
+  let hitCount = 0;
   let sunk = false;
 
   function getHit() {
-    if (hit_count == length) {
+    if (hitCount == length) {
       return;
     }
 
-    hit_count++;
-    if (hit_count == length) {
+    hitCount++;
+    if (hitCount == length) {
       sunk = true;
     }
   }
