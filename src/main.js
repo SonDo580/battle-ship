@@ -1,22 +1,29 @@
 export const ERROR_MESSAGE = {
-  INVALID_SHIP_LENGTH: "Invalid ship length",
+  invalidShipType: "Invalid ship type",
 };
 
-const SHIP_LENGTH_MAP = {
-  carrier: 5,
-  battleShip: 4,
-  destroyer: 3,
-  submarine: 3,
-  patrolBoat: 2,
+export const SHIP_TYPE = {
+  carrier: "carrier",
+  battleShip: "battleShip",
+  destroyer: "destroyer",
+  submarine: "submarine",
+  patrolBoat: "patrolBoat",
 };
 
-const validShipLengthSet = new Set(Object.values(SHIP_LENGTH_MAP));
+export const SHIP_LENGTH_MAP = {
+  [SHIP_TYPE.carrier]: 5,
+  [SHIP_TYPE.battleShip]: 4,
+  [SHIP_TYPE.destroyer]: 3,
+  [SHIP_TYPE.submarine]: 3,
+  [SHIP_TYPE.patrolBoat]: 2,
+};
 
-export function ShipFactory(length) {
-  if (!validShipLengthSet.has(length)) {
-    throw new Error(ERROR_MESSAGE.INVALID_SHIP_LENGTH);
+export function ShipFactory(shipType) {
+  if (!SHIP_LENGTH_MAP[shipType]) {
+    throw new Error(ERROR_MESSAGE.invalidShipType);
   }
 
+  const length = SHIP_LENGTH_MAP[shipType];
   let hit_count = 0;
   let sunk = false;
 
@@ -36,6 +43,7 @@ export function ShipFactory(length) {
   }
 
   return {
+    length,
     getHit,
     isSunk,
   };

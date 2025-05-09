@@ -1,18 +1,22 @@
-import { ERROR_MESSAGE, ShipFactory } from "./main";
+import { ERROR_MESSAGE, SHIP_TYPE, SHIP_LENGTH_MAP, ShipFactory } from "./main";
 
 describe("ShipFactory", () => {
-  it("should throw error for invalid ship length", () => {
-    expect(() => ShipFactory(1)).toThrow(ERROR_MESSAGE.INVALID_SHIP_LENGTH);
-    expect(() => ShipFactory(6)).toThrow(ERROR_MESSAGE.INVALID_SHIP_LENGTH);
-    expect(() => ShipFactory(0.5)).toThrow(ERROR_MESSAGE.INVALID_SHIP_LENGTH);
+  it("should throw error for invalid ship type", () => {
+    expect(() => ShipFactory("invalid")).toThrow(ERROR_MESSAGE.invalidShipType);
+  });
+
+  it("ship create a ship with correct length", () => {
+    const shipType = SHIP_TYPE.battleShip;
+    const ship = ShipFactory(shipType);
+    expect(ship.length).toBe(SHIP_LENGTH_MAP[shipType]);
   });
 
   it("ship should be sunk when fully hit", () => {
-    const length = 3;
-    const ship = ShipFactory(length);
+    const shipType = SHIP_TYPE.carrier;
+    const ship = ShipFactory(shipType);
 
     // not sunk before fully hit
-    for (let i = 0; i < length - 1; i++) {
+    for (let i = 0; i < ship.length - 1; i++) {
       ship.getHit();
       expect(ship.isSunk()).toBe(false);
     }
