@@ -1,65 +1,9 @@
-export const ERROR_MESSAGE = {
-  invalidCoordinates: "Invalid coordinates",
-  invalidShipPosition: "Invalid ship position",
-  alreadyAttacked: "Position already attacked",
-};
-
-export const SHIP_TYPE = {
-  carrier: "carrier",
-  battleShip: "battleShip",
-  destroyer: "destroyer",
-  submarine: "submarine",
-  patrolBoat: "patrolBoat",
-};
-
-const shipTypesCount = Object.keys(SHIP_TYPE).length;
-
-export const SHIP_LENGTH_MAP = {
-  [SHIP_TYPE.carrier]: 5,
-  [SHIP_TYPE.battleShip]: 4,
-  [SHIP_TYPE.destroyer]: 3,
-  [SHIP_TYPE.submarine]: 3,
-  [SHIP_TYPE.patrolBoat]: 2,
-};
-
-export const SHIP_DIRECTION = {
-  horizontal: "horizontal",
-  vertical: "vertical",
-};
-
-export const BOARD_SIZE = 10;
-
-const PLAYER_TYPE = {
-  player: "player",
-  computer: "computer",
-};
-
-export function ShipFactory(shipType) {
-  const length = SHIP_LENGTH_MAP[shipType];
-  let hitCount = 0;
-  let sunk = false;
-
-  function getHit() {
-    if (hitCount === length) {
-      return;
-    }
-
-    hitCount++;
-    if (hitCount === length) {
-      sunk = true;
-    }
-  }
-
-  function isSunk() {
-    return sunk;
-  }
-
-  return {
-    length,
-    getHit,
-    isSunk,
-  };
-}
+import {
+  BOARD_SIZE,
+  ERROR_MESSAGE,
+  SHIP_DIRECTION,
+  shipTypesCount,
+} from "./constants";
 
 export function GameBoardFactory() {
   const positionToShipMap = {};
@@ -159,12 +103,5 @@ export function GameBoardFactory() {
     placeShip,
     receiveAttack,
     allShipsSunk,
-  };
-}
-
-export function PlayerFactory(playerType) {
-  return {
-    type: playerType,
-    board: GameBoardFactory(),
   };
 }
