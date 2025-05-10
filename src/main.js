@@ -29,6 +29,11 @@ export const SHIP_DIRECTION = {
 
 export const BOARD_SIZE = 10;
 
+const PLAYER_TYPE = {
+  player: "player",
+  computer: "computer",
+};
+
 export function ShipFactory(shipType) {
   const length = SHIP_LENGTH_MAP[shipType];
   let hitCount = 0;
@@ -154,5 +159,12 @@ export function GameBoardFactory() {
     placeShip,
     receiveAttack,
     allShipsSunk,
+  };
+}
+
+export function PlayerFactory(playerType) {
+  return {
+    type: playerType,
+    board: GameBoardFactory(),
   };
 }
