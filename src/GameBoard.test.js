@@ -1,4 +1,4 @@
-import { BOARD_SIZE, SHIP_DIRECTION, SHIP_TYPE } from "./constants";
+import { BOARD_SIZE, MARKER, SHIP_DIRECTION, SHIP_TYPE } from "./constants";
 import { GameBoardFactory } from "./GameBoard";
 import { ShipFactory } from "./Ship";
 
@@ -110,5 +110,48 @@ describe("GameBoardFactory", () => {
     }
 
     expect(gameBoard.allShipsSunk()).toBe(true);
+  });
+
+  it("should update board state correctly", () => {
+    const gameBoard = GameBoardFactory();
+
+    // All positions are empty initially
+    let currentState = gameBoard.getState();
+    expect(currentState.length).toBe(BOARD_SIZE);
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      expect(currentState[row].length).toBe(BOARD_SIZE);
+      for (let col = 0; col < BOARD_SIZE; col++) {
+        expect(currentState[row][col]).toBe(MARKER.empty);
+      }
+    }
+
+    const placedRow = 0;
+    const startCol = 0;
+    const ship = ShipFactory(SHIP_TYPE.battleShip);
+    const endCol = startCol + ship.length - 1;
+    gameBoard.placeShip(ship, placedRow, startCol, SHIP_DIRECTION.horizontal);
+
+    // Some positions are occupied by the ship
+    currentState = gameBoard.getState();
+    for (let col = startCol; col <= endCol; col++) {
+      expect(currentState[placedRow][col]).toBe(MARKER.ship);
+    }
+    for (let col = endCol + 1; col < BOARD_SIZE; col++) {
+      expect(currentState[placedRow][col]).toBe(MARKER.empty);
+    }
+
+    // Attack all positions on placedRow
+    for (let col = startCol; col < BOARD_SIZE; col++) {
+      gameBoard.receiveAttack(placedRow, col);
+    }
+
+    // Some attacks hit the ship while the others are missed
+    currentState = gameBoard.getState();
+    for (let col = startCol; col <= endCol; col++) {
+      expect(currentState[placedRow][col]).toBe(MARKER.shipHit);
+    }
+    for (let col = endCol + 1; col < BOARD_SIZE; col++) {
+      expect(currentState[placedRow][col]).toBe(MARKER.miss);
+    }
   });
 });

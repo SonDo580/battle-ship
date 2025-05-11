@@ -1,6 +1,7 @@
 import {
   BOARD_SIZE,
   ERROR_MESSAGE,
+  MARKER,
   SHIP_DIRECTION,
   shipTypesCount,
 } from "./constants";
@@ -9,6 +10,18 @@ export function GameBoardFactory() {
   const positionToShipMap = {};
   const attackedPositionSet = new Set();
   let sunkShipsCount = 0;
+
+  const state = [];
+  _initState();
+
+  function _initState() {
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      state[row] = [];
+      for (let col = 0; col < BOARD_SIZE; col++) {
+        state[row][col] = MARKER.empty;
+      }
+    }
+  }
 
   function placeShip(ship, topRow, leftCol, direction) {
     if (!_isValidCoords(topRow, leftCol)) {
@@ -40,6 +53,7 @@ export function GameBoardFactory() {
     for (let col = leftCol; col <= rightCol; col++) {
       const positionKey = _getPositionKey(row, col);
       positionToShipMap[positionKey] = ship;
+      state[row][col] = MARKER.ship;
     }
   }
 
@@ -61,6 +75,7 @@ export function GameBoardFactory() {
     for (let row = topRow; row <= bottomRow; row++) {
       const positionKey = _getPositionKey(row, col);
       positionToShipMap[positionKey] = ship;
+      state[row][col] = MARKER.ship;
     }
   }
 
@@ -80,15 +95,22 @@ export function GameBoardFactory() {
     const attackedShip = positionToShipMap[positionKey];
     if (attackedShip) {
       attackedShip.getHit();
+      state[row][col] = MARKER.shipHit;
 
       if (attackedShip.isSunk()) {
         sunkShipsCount++;
       }
+    } else {
+      state[row][col] = MARKER.miss;
     }
   }
 
   function allShipsSunk() {
     return sunkShipsCount === shipTypesCount;
+  }
+
+  function getState() {
+    return state;
   }
 
   function _getPositionKey(row, col) {
@@ -103,5 +125,6 @@ export function GameBoardFactory() {
     placeShip,
     receiveAttack,
     allShipsSunk,
+    getState,
   };
 }

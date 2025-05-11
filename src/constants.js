@@ -33,3 +33,10 @@ export const PLAYER_TYPE = {
   player: "player",
   computer: "computer",
 };
+
+export const MARKER = {
+  empty: "empty",
+  miss: "miss",
+  ship: "ship",
+  shipHit: "shipHit",
+};
